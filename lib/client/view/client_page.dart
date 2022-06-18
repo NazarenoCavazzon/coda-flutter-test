@@ -250,6 +250,13 @@ class _ViewClientState extends State<ViewClient> {
                             if (state.isSuccesful ||
                                 state.isLoadingMoreClients) {
                               return ClientListWidget(
+                                onRefresh: () async {
+                                  context.read<ClientBloc>().loadClients();
+                                  setState(() {
+                                    clientsShowed = 5;
+                                    noMoreClients = false;
+                                  });
+                                },
                                 clients: clients,
                                 clientsShowed: clientsShowed,
                                 state: state,
@@ -331,12 +338,14 @@ class ClientListWidget extends StatelessWidget {
     required this.clientsShowed,
     required this.state,
     required this.clients,
+    required this.onRefresh,
   });
   final int clientsShowed;
   final ClientState state;
   final List<Client> clients;
   final bool noMoreClients;
   final void Function()? onPressed;
+  final Future<void> Function() onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -357,9 +366,7 @@ class ClientListWidget extends StatelessWidget {
     return Expanded(
       child: RefreshIndicator(
         color: Colors.black,
-        onRefresh: () async {
-          context.read<ClientBloc>().loadClients();
-        },
+        onRefresh: onRefresh,
         child: ListView.builder(
           physics: const BouncingScrollPhysics(),
           itemCount: clientsShowed + 1,
