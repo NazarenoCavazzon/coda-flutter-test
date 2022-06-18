@@ -22,6 +22,7 @@ class ClientBloc extends Bloc<ClientEvent, ClientState> {
     on<EditClient>(_editClient);
     on<LoadMoreClients>(_loadMoreClients);
     on<InitialClient>(_initialClient);
+    on<DeleteClient>(_deleteClient);
   }
 
   FutureOr<void> _loadClients(
@@ -190,6 +191,9 @@ class ClientBloc extends Bloc<ClientEvent, ClientState> {
           cudStatus: ClientCudStatus.createdSuccessfully,
         ),
       );
+      add(
+        LoadClients(),
+      );
     } catch (e) {
       emit(
         state.copyWith(
@@ -261,6 +265,56 @@ class ClientBloc extends Bloc<ClientEvent, ClientState> {
     }
   }
 
+  FutureOr<void> _deleteClient(
+    DeleteClient event,
+    Emitter<ClientState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        cudStatus: ClientCudStatus.initial,
+      ),
+    );
+    try {
+      final uri =
+          Uri.https(Constants.authority, '/client/remove/${event.client.id}');
+      final token = Hive.box<dynamic>(BoxKeys.token).get('token');
+      final response = await http.delete(
+        uri,
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      final decodedResponse = jsonDecode(response.body);
+
+      if (decodedResponse['success'] != true) {
+        return emit(
+          state.copyWith(
+            error: Exception(),
+            status: ClientStateStatus.failure,
+          ),
+        );
+      }
+
+      emit(
+        state.copyWith(
+          cudStatus: ClientCudStatus.deletedSuccessfully,
+        ),
+      );
+
+      add(
+        LoadClients(),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          error: Exception(e),
+          cudStatus: ClientCudStatus.failure,
+        ),
+      );
+    }
+  }
+
   void loadClients() {
     add(LoadClients());
   }
@@ -279,5 +333,9 @@ class ClientBloc extends Bloc<ClientEvent, ClientState> {
 
   void editClient(Client client) => add(
         EditClient(client: client),
+      );
+
+  void deleteClient(Client client) => add(
+        DeleteClient(client: client),
       );
 }

@@ -5,6 +5,7 @@ class CodaTextFormField extends StatelessWidget {
     super.key,
     this.obscureText,
     this.onChanged,
+    this.inputType,
     required this.validator,
     required this.hintText,
     required this.controller,
@@ -12,12 +13,14 @@ class CodaTextFormField extends StatelessWidget {
   final String? Function(String? value, BuildContext context) validator;
   final bool? obscureText;
   final void Function()? onChanged;
+  final TextInputType? inputType;
   final String hintText;
   final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      keyboardType: inputType,
       controller: controller,
       validator: (String? value) {
         return validator.call(value, context);

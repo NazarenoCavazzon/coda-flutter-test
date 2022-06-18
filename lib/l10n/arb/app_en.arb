@@ -23,5 +23,9 @@
     "editClient": "Edit client",
     "fieldEmpty": "Empty field",
     "clientCreatedSuccessfuly": "Client created successfully",
-    "randomError": "An error occurred"
+    "randomError": "An error occurred",
+    "loginSuccessfuly": "User logged successfully",
+    "credentialsError": "User credentials aren't correct",
+    "noClientsFound": "No se encontraron clientes",
+    "retry": "Reintentar"
 }

@@ -1,10 +1,12 @@
 import 'package:blur/blur.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_coda/client/view/client_page.dart';
 import 'package:test_coda/common/app_size.dart';
 import 'package:test_coda/common/validators.dart';
 import 'package:test_coda/common/widgets/background_paint.dart';
 import 'package:test_coda/common/widgets/coda_button.dart';
+import 'package:test_coda/common/widgets/coda_snackbar.dart';
 import 'package:test_coda/l10n/l10n.dart';
 import 'package:test_coda/login/bloc/login_bloc.dart';
 import 'package:test_coda/login/widgets/coda_text_form_field.dart';
@@ -48,9 +50,24 @@ class _ViewLoginState extends State<ViewLogin> {
             final height = constraints.maxHeight;
 
             return BlocConsumer<LoginBloc, LoginState>(
-              listener: (context, state) {},
+              listener: (context, state) {
+                if (state.isSuccesful) {
+                  CodaSnackbar.success(message: context.l10n.loginSuccessfuly)
+                      .show(context);
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute<void>(
+                      builder: (context) => const PageClient(),
+                    ),
+                  );
+                } else if (state.isBadCredentials) {
+                  CodaSnackbar.error(message: context.l10n.credentialsError)
+                      .show(context);
+                } else if (state.isFailure) {
+                  CodaSnackbar.error(message: context.l10n.randomError)
+                      .show(context);
+                }
+              },
               builder: (context, state) {
-                if (state.isSuccesful) {}
                 return Stack(
                   children: [
                     Blur(
@@ -82,6 +99,7 @@ class _ViewLoginState extends State<ViewLogin> {
                         ),
                         alignment: Alignment.center,
                         child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -109,6 +127,7 @@ class _ViewLoginState extends State<ViewLogin> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       CodaTextFormField(
+                                        inputType: TextInputType.emailAddress,
                                         controller: _emailController,
                                         hintText: context.l10n.mail,
                                         validator: validateEmail,
@@ -134,9 +153,8 @@ class _ViewLoginState extends State<ViewLogin> {
                                 height: AppSize(context).pixels(52),
                               ),
                               CodaButton(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: AppSize(context).pixels(18),
-                                ),
+                                loading: state.isAttempting,
+                                height: AppSize(context).pixels(52),
                                 width: width * 0.8,
                                 title: context.l10n.login,
                                 onPressed: submit,

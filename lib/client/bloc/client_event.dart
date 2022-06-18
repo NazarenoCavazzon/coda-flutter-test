@@ -33,4 +33,12 @@ class CreateClient extends ClientEvent {
 
 class InitialClient extends ClientEvent {}
 
-class DeleteClient extends ClientEvent {}
+class DeleteClient extends ClientEvent {
+  const DeleteClient({
+    required this.client,
+  });
+  final Client client;
+
+  @override
+  List<Object> get props => [client];
+}

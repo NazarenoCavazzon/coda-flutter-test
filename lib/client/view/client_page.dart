@@ -1,15 +1,18 @@
 import 'package:blur/blur.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:test_coda/client/bloc/client_bloc.dart';
 import 'package:test_coda/client/models/client.dart';
-import 'package:test_coda/client/widgets/add_new_modal.dart';
+import 'package:test_coda/client/widgets/client_modal.dart';
 import 'package:test_coda/client/widgets/client_tile.dart';
 import 'package:test_coda/common/app_size.dart';
+import 'package:test_coda/common/box_keys.dart';
 import 'package:test_coda/common/widgets/background_paint.dart';
 import 'package:test_coda/common/widgets/coda_button.dart';
 import 'package:test_coda/common/widgets/coda_snackbar.dart';
 import 'package:test_coda/l10n/l10n.dart';
+import 'package:test_coda/login/view/login_page.dart';
 
 class PageClient extends StatelessWidget {
   const PageClient({super.key});
@@ -106,11 +109,31 @@ class _ViewClientState extends State<ViewClient> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Center(
-                          child: Image.asset(
-                            'assets/login-title.png',
-                            width: AppSize(context).pixels(120),
-                          ),
+                        Stack(
+                          children: [
+                            Align(
+                              child: Image.asset(
+                                'assets/login-title.png',
+                                width: AppSize(context).pixels(120),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: IconButton(
+                                onPressed: () {
+                                  Hive.box<dynamic>(BoxKeys.token).clear();
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute<void>(
+                                      builder: (context) => const PageLogin(),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.logout,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(height: AppSize(context).pixels(32)),
                         Text(
@@ -155,13 +178,13 @@ class _ViewClientState extends State<ViewClient> {
                                                     ),
                                           )
                                           .toList();
-                                      if (clients.length > 5) {
-                                        clientsShowed = 5;
-                                        noMoreClients = false;
-                                      } else {
-                                        clientsShowed = clients.length;
-                                        noMoreClients = true;
-                                      }
+                                    }
+                                    if (clients.length > 5) {
+                                      clientsShowed = 5;
+                                      noMoreClients = false;
+                                    } else {
+                                      clientsShowed = clients.length;
+                                      noMoreClients = true;
                                     }
                                   });
                                 },
@@ -200,9 +223,7 @@ class _ViewClientState extends State<ViewClient> {
                               ),
                             ),
                             CodaButton(
-                              padding: EdgeInsets.symmetric(
-                                vertical: AppSize(context).pixels(8),
-                              ),
+                              height: AppSize(context).pixels(30),
                               width: AppSize(context).pixels(95),
                               title: context.l10n.addNew,
                               onPressed: () async {
@@ -210,7 +231,7 @@ class _ViewClientState extends State<ViewClient> {
                                   barrierColor: Colors.transparent,
                                   context: context,
                                   builder: (BuildContext innerContext) {
-                                    return const AddNewClientModal();
+                                    return const ClientModal();
                                   },
                                 ).then((client) {
                                   if (client != null) {
@@ -255,6 +276,32 @@ class _ViewClientState extends State<ViewClient> {
                                   }
                                 },
                               );
+                            } else if (state.isFailure) {
+                              return Expanded(
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        context.l10n.randomError,
+                                        style: TextStyle(
+                                          fontSize: AppSize(context).pixels(20),
+                                          fontWeight: FontWeight.w700,
+                                          color: const Color(0xff434545),
+                                        ),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          context
+                                              .read<ClientBloc>()
+                                              .loadClients();
+                                        },
+                                        child: Text(context.l10n.retry),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
                             }
                             return const Expanded(
                               child: Center(
@@ -297,7 +344,7 @@ class ClientListWidget extends StatelessWidget {
       return Expanded(
         child: Center(
           child: Text(
-            'No clients found',
+            context.l10n.noClientsFound,
             style: TextStyle(
               fontSize: AppSize(context).pixels(20),
               fontWeight: FontWeight.w700,
@@ -308,33 +355,37 @@ class ClientListWidget extends StatelessWidget {
       );
     }
     return Expanded(
-      child: ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        itemCount: clientsShowed + 1,
-        itemBuilder: (context, index) {
-          if (index == clientsShowed && !noMoreClients) {
-            return Container(
-              margin: EdgeInsets.symmetric(
-                vertical: AppSize(context).pixels(16),
-              ),
-              child: CodaButton(
-                onPressed: onPressed,
-                padding: EdgeInsets.symmetric(
-                  vertical: AppSize(context).pixels(15),
-                ),
-                width: MediaQuery.of(context).size.width * 0.7,
-                title: context.l10n.loadMore,
-              ),
-            );
-          }
-          try {
-            return ClientTile(
-              client: clients[index],
-            );
-          } catch (_) {
-            return const SizedBox();
-          }
+      child: RefreshIndicator(
+        color: Colors.black,
+        onRefresh: () async {
+          context.read<ClientBloc>().loadClients();
         },
+        child: ListView.builder(
+          physics: const BouncingScrollPhysics(),
+          itemCount: clientsShowed + 1,
+          itemBuilder: (context, index) {
+            if (index == clientsShowed && !noMoreClients) {
+              return Container(
+                margin: EdgeInsets.symmetric(
+                  vertical: AppSize(context).pixels(16),
+                ),
+                child: CodaButton(
+                  onPressed: onPressed,
+                  height: AppSize(context).pixels(52),
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  title: context.l10n.loadMore,
+                ),
+              );
+            }
+            try {
+              return ClientTile(
+                client: clients[index],
+              );
+            } catch (_) {
+              return const SizedBox();
+            }
+          },
+        ),
       ),
     );
   }

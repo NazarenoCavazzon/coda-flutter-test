@@ -5,14 +5,16 @@ class CodaButton extends StatelessWidget {
   const CodaButton({
     super.key,
     this.onPressed,
-    required this.padding,
+    this.loading = false,
+    required this.height,
     required this.width,
     required this.title,
   });
   final void Function()? onPressed;
-  final EdgeInsets padding;
   final double width;
+  final double height;
   final String title;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +23,8 @@ class CodaButton extends StatelessWidget {
       padding: EdgeInsets.zero,
       onPressed: onPressed,
       child: Container(
-        padding: padding,
         alignment: Alignment.center,
+        height: height,
         width: width,
         decoration: BoxDecoration(
           color: const Color(0xff0D1111),
@@ -30,13 +32,17 @@ class CodaButton extends StatelessWidget {
             AppSize(context).pixels(34),
           ),
         ),
-        child: Text(
-          title,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: AppSize(context).pixels(14),
-          ),
-        ),
+        child: loading
+            ? const CircularProgressIndicator(
+                color: Colors.white,
+              )
+            : Text(
+                title,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: AppSize(context).pixels(14),
+                ),
+              ),
       ),
     );
   }

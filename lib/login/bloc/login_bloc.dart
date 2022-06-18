@@ -40,7 +40,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         return emit(
           state.copyWith(
             error: Exception(),
-            status: LoginStateStatus.failure,
+            status: LoginStateStatus.badCredentials,
           ),
         );
       }

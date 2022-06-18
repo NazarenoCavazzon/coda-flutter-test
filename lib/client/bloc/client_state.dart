@@ -15,6 +15,7 @@ enum ClientCudStatus {
   initial,
   createdSuccessfully,
   updatedSuccessfully,
+  deletedSuccessfully,
   failure,
 }
 

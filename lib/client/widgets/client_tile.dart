@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_coda/client/bloc/client_bloc.dart';
 import 'package:test_coda/client/models/client.dart';
-import 'package:test_coda/client/widgets/add_new_modal.dart';
+import 'package:test_coda/client/widgets/client_modal.dart';
 import 'package:test_coda/common/app_size.dart';
+import 'package:test_coda/l10n/l10n.dart';
 
 class ClientTile extends StatelessWidget {
   const ClientTile({super.key, required this.client});
@@ -72,28 +73,67 @@ class ClientTile extends StatelessWidget {
             ],
           ),
           const Spacer(),
-          IconButton(
-            onPressed: () async {
-              await showDialog<Client?>(
-                barrierColor: Colors.transparent,
-                context: context,
-                builder: (BuildContext innerContext) {
-                  return AddNewClientModal(
-                    client: client,
-                  );
-                },
-              ).then((client) {
-                if (client != null) {
-                  context.read<ClientBloc>().editClient(client);
-                }
-              });
+          PopupMenuButton(
+            color: Colors.black,
+            onSelected: (PopUpOptions option) async {
+              if (option == PopUpOptions.edit) {
+                await showDialog<Client?>(
+                  barrierColor: Colors.transparent,
+                  context: context,
+                  builder: (BuildContext innerContext) {
+                    return ClientModal(
+                      client: client,
+                    );
+                  },
+                ).then((client) {
+                  if (client != null) {
+                    context.read<ClientBloc>().editClient(client);
+                  }
+                });
+              } else {
+                context.read<ClientBloc>().deleteClient(client);
+              }
             },
-            icon: const Icon(
-              Icons.more_vert,
-            ),
+            itemBuilder: (context) => [
+              PopupMenuItem<PopUpOptions>(
+                height: AppSize(context).pixels(35),
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSize(context).pixels(20),
+                ),
+                value: PopUpOptions.edit,
+                child: Text(
+                  context.l10n.edit,
+                  style: TextStyle(
+                    fontSize: AppSize(context).pixels(14),
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              PopupMenuItem<PopUpOptions>(
+                height: AppSize(context).pixels(30),
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSize(context).pixels(20),
+                ),
+                value: PopUpOptions.delete,
+                child: Text(
+                  context.l10n.delete,
+                  style: TextStyle(
+                    fontSize: AppSize(context).pixels(14),
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
+}
+
+enum PopUpOptions {
+  edit,
+  delete,
 }

@@ -13,6 +13,7 @@ class BackgroundPaint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
+      heightFactor: MediaQuery.of(context).size.height,
       alignment: alignment,
       child: SvgPicture.asset(
         svg,

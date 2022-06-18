@@ -4,6 +4,7 @@ enum LoginStateStatus {
   initial,
   attemptingLogin,
   succesful,
+  badCredentials,
   failure,
 }
 
@@ -29,6 +30,7 @@ class LoginState extends Equatable {
   bool get isInitial => status == LoginStateStatus.initial;
   bool get isAttempting => status == LoginStateStatus.attemptingLogin;
   bool get isSuccesful => status == LoginStateStatus.succesful;
+  bool get isBadCredentials => status == LoginStateStatus.badCredentials;
   bool get isFailure => status == LoginStateStatus.failure;
 
   @override
