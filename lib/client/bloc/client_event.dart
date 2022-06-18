@@ -11,8 +11,26 @@ class LoadClients extends ClientEvent {}
 
 class LoadMoreClients extends ClientEvent {}
 
-class EditClient extends ClientEvent {}
+class EditClient extends ClientEvent {
+  const EditClient({
+    required this.client,
+  });
+  final Client client;
 
-class CreateClient extends ClientEvent {}
+  @override
+  List<Object> get props => [client];
+}
+
+class CreateClient extends ClientEvent {
+  const CreateClient({
+    required this.client,
+  });
+  final Client client;
+
+  @override
+  List<Object> get props => [client];
+}
+
+class InitialClient extends ClientEvent {}
 
 class DeleteClient extends ClientEvent {}

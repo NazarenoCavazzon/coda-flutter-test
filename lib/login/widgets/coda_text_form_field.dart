@@ -4,14 +4,14 @@ class CodaTextFormField extends StatelessWidget {
   const CodaTextFormField({
     super.key,
     this.obscureText,
+    this.onChanged,
     required this.validator,
-    required this.onChanged,
     required this.hintText,
     required this.controller,
   });
   final String? Function(String? value, BuildContext context) validator;
   final bool? obscureText;
-  final void Function() onChanged;
+  final void Function()? onChanged;
   final String hintText;
   final TextEditingController controller;
 

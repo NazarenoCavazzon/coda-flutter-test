@@ -26,3 +26,10 @@ String? validatePassword(String? password, BuildContext context) {
   }
   return null;
 }
+
+String? emptyFieldValidator(String? value, BuildContext context) {
+  if (value == null || value.isEmpty) {
+    return context.l10n.fieldEmpty;
+  }
+  return null;
+}

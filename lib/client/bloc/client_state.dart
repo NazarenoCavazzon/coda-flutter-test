@@ -11,6 +11,13 @@ enum ClientStateStatus {
   failure,
 }
 
+enum ClientCudStatus {
+  initial,
+  createdSuccessfully,
+  updatedSuccessfully,
+  failure,
+}
+
 class ClientState extends Equatable {
   const ClientState({
     this.error,
@@ -18,12 +25,14 @@ class ClientState extends Equatable {
     this.clients = const [],
     this.isLastPage = false,
     this.pageIndex = 1,
+    this.cudStatus = ClientCudStatus.initial,
   });
   final ClientStateStatus status;
   final Exception? error;
   final List<Client> clients;
   final bool isLastPage;
   final int pageIndex;
+  final ClientCudStatus cudStatus;
 
   ClientState copyWith({
     Exception? error,
@@ -31,6 +40,7 @@ class ClientState extends Equatable {
     List<Client>? clients,
     bool? isLastPage,
     int? pageIndex,
+    ClientCudStatus? cudStatus,
   }) {
     return ClientState(
       error: error ?? this.error,
@@ -38,6 +48,7 @@ class ClientState extends Equatable {
       clients: clients ?? this.clients,
       isLastPage: isLastPage ?? this.isLastPage,
       pageIndex: pageIndex ?? this.pageIndex,
+      cudStatus: cudStatus ?? this.cudStatus,
     );
   }
 
@@ -58,5 +69,6 @@ class ClientState extends Equatable {
         clients,
         isLastPage,
         pageIndex,
+        cudStatus,
       ];
 }

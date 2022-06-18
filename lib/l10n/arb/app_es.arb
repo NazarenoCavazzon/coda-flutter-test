@@ -20,5 +20,8 @@
     "emailAddress": "Direccion de correo*",
     "cancel": "Cancelar",
     "save": "GUARDAR",
-    "editClient": "Editar cliente"
+    "editClient": "Editar cliente",
+    "fieldEmpty": "Campo vacio",
+    "clientCreatedSuccessfuly": "Cliente creado satisfactoriamente",
+    "randomError": "Ocurrio un error"
 }

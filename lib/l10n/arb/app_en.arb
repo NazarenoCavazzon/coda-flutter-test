@@ -20,5 +20,8 @@
     "emailAddress": "Email address*",
     "cancel": "Cancel",
     "save": "SAVE",
-    "editClient": "Edit client"
+    "editClient": "Edit client",
+    "fieldEmpty": "Empty field",
+    "clientCreatedSuccessfuly": "Client created successfully",
+    "randomError": "An error occurred"
 }

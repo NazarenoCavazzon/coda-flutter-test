@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 @immutable
 class Client {
   const Client({
-    required this.id,
+    this.id,
     this.firstname,
     this.lastname,
     this.email,
@@ -18,8 +18,9 @@ class Client {
   });
 
   factory Client.fromMap(Map<String, dynamic> map) {
+    final id = map['id'] as int?;
     return Client(
-      id: map['id'] as num?,
+      id: id,
       firstname: map['firstname'] as String?,
       lastname: map['lastname'] as String?,
       email: map['email'] as String?,
@@ -28,11 +29,11 @@ class Client {
       caption: map['caption'] as String?,
       createdAt: map['createdAt'] as String?,
       uploadedAt: map['uploadedAt'] as String?,
-      deleted: map['deleted'] as num?,
+      deleted: map['deleted'] as int?,
     );
   }
 
-  final num? id;
+  final int? id;
   final String? firstname;
   final String? lastname;
   final String? email;
@@ -41,10 +42,10 @@ class Client {
   final String? caption;
   final String? createdAt;
   final String? uploadedAt;
-  final num? deleted;
+  final int? deleted;
 
   Client copyWith({
-    num? id,
+    int? id,
     String? firstname,
     String? lastname,
     String? email,
@@ -53,7 +54,7 @@ class Client {
     String? caption,
     String? createdAt,
     String? uploadedAt,
-    num? deleted,
+    int? deleted,
   }) {
     return Client(
       id: id ?? this.id,

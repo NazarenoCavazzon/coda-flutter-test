@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_coda/client/bloc/client_bloc.dart';
 import 'package:test_coda/client/models/client.dart';
 import 'package:test_coda/client/widgets/add_new_modal.dart';
 import 'package:test_coda/common/app_size.dart';
@@ -71,14 +73,20 @@ class ClientTile extends StatelessWidget {
           ),
           const Spacer(),
           IconButton(
-            onPressed: () {
-              showDialog<void>(
+            onPressed: () async {
+              await showDialog<Client?>(
                 barrierColor: Colors.transparent,
                 context: context,
                 builder: (BuildContext innerContext) {
-                  return AddNewClientModal();
+                  return AddNewClientModal(
+                    client: client,
+                  );
                 },
-              );
+              ).then((client) {
+                if (client != null) {
+                  context.read<ClientBloc>().editClient(client);
+                }
+              });
             },
             icon: const Icon(
               Icons.more_vert,

@@ -7,6 +7,7 @@ environment:
   sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
+  another_flushbar: ^1.10.29
   bloc: ^8.0.3
   blur: ^3.0.0
   dotted_decoration: ^2.0.0
@@ -21,6 +22,7 @@ dependencies:
   hive_flutter: ^1.1.0
   hive_generator: ^1.1.3
   http: ^0.13.4
+  image_picker: ^0.8.5+3
   intl: ^0.17.0
 
 dev_dependencies:
