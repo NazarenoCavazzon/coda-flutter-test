@@ -130,11 +130,14 @@ class _ClientModalState extends State<ClientModal> {
                                       );
                                     }
                                     if (image != null) {
-                                      return Image.file(
-                                        File(image!.path),
-                                        fit: BoxFit.cover,
+                                      return SizedBox(
                                         width: AppSize(context).pixels(120),
                                         height: AppSize(context).pixels(120),
+                                        child: CircleAvatar(
+                                          backgroundImage: AssetImage(
+                                            image!.path,
+                                          ),
+                                        ),
                                       );
                                     }
                                     return Column(

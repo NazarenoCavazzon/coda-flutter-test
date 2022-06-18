@@ -5,6 +5,7 @@ import 'package:test_coda/client/models/client.dart';
 import 'package:test_coda/client/widgets/client_modal.dart';
 import 'package:test_coda/common/app_size.dart';
 import 'package:test_coda/l10n/l10n.dart';
+import 'package:text_scroll/text_scroll.dart';
 
 class ClientTile extends StatelessWidget {
   const ClientTile({super.key, required this.client});
@@ -51,26 +52,37 @@ class ClientTile extends StatelessWidget {
           SizedBox(
             width: AppSize(context).pixels(16),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${client.firstname} ${client.lastname}',
-                style: TextStyle(
-                  color: const Color(0xff0D0D0D),
-                  fontSize: AppSize(context).pixels(14),
-                  fontWeight: FontWeight.w500,
+          SizedBox(
+            width: AppSize(context).pixels(170),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextScroll(
+                  '${client.firstname} ${client.lastname}',
+                  velocity: const Velocity(
+                    pixelsPerSecond: Offset(25, 0),
+                  ),
+                  delayBefore: const Duration(milliseconds: 500),
+                  style: TextStyle(
+                    color: const Color(0xff0D0D0D),
+                    fontSize: AppSize(context).pixels(14),
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              Text(
-                client.email ?? '',
-                style: TextStyle(
-                  color: const Color(0xff434545),
-                  fontSize: AppSize(context).pixels(12),
-                  fontWeight: FontWeight.w400,
+                TextScroll(
+                  client.email ?? '',
+                  velocity: const Velocity(
+                    pixelsPerSecond: Offset(25, 0),
+                  ),
+                  delayBefore: const Duration(milliseconds: 500),
+                  style: TextStyle(
+                    color: const Color(0xff434545),
+                    fontSize: AppSize(context).pixels(12),
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           const Spacer(),
           PopupMenuButton(
