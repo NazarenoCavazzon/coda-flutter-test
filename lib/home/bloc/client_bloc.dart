@@ -7,16 +7,16 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:test_coda/client/models/client.dart';
-import 'package:test_coda/client/models/client_list_response.dart';
 import 'package:test_coda/common/box_keys.dart';
 import 'package:test_coda/common/constants.dart';
+import 'package:test_coda/home/models/client.dart';
+import 'package:test_coda/home/models/client_list_response.dart';
 
 part 'client_event.dart';
 part 'client_state.dart';
 
-class ClientBloc extends Bloc<ClientEvent, ClientState> {
-  ClientBloc() : super(const ClientState()) {
+class HomeBloc extends Bloc<HomeEvent, HomeState> {
+  HomeBloc() : super(const HomeState()) {
     on<LoadClients>(_loadClients);
     on<CreateClient>(_createClient);
     on<EditClient>(_editClient);
@@ -27,7 +27,7 @@ class ClientBloc extends Bloc<ClientEvent, ClientState> {
 
   FutureOr<void> _loadClients(
     LoadClients event,
-    Emitter<ClientState> emit,
+    Emitter<HomeState> emit,
   ) async {
     emit(
       state.copyWith(
@@ -81,7 +81,7 @@ class ClientBloc extends Bloc<ClientEvent, ClientState> {
 
   FutureOr<void> _loadMoreClients(
     LoadMoreClients event,
-    Emitter<ClientState> emit,
+    Emitter<HomeState> emit,
   ) async {
     emit(
       state.copyWith(
@@ -136,7 +136,7 @@ class ClientBloc extends Bloc<ClientEvent, ClientState> {
 
   FutureOr<void> _initialClient(
     InitialClient event,
-    Emitter<ClientState> emit,
+    Emitter<HomeState> emit,
   ) async {
     emit(
       state.copyWith(
@@ -147,7 +147,7 @@ class ClientBloc extends Bloc<ClientEvent, ClientState> {
 
   FutureOr<void> _createClient(
     CreateClient event,
-    Emitter<ClientState> emit,
+    Emitter<HomeState> emit,
   ) async {
     emit(
       state.copyWith(
@@ -206,7 +206,7 @@ class ClientBloc extends Bloc<ClientEvent, ClientState> {
 
   FutureOr<void> _editClient(
     EditClient event,
-    Emitter<ClientState> emit,
+    Emitter<HomeState> emit,
   ) async {
     emit(
       state.copyWith(
@@ -267,7 +267,7 @@ class ClientBloc extends Bloc<ClientEvent, ClientState> {
 
   FutureOr<void> _deleteClient(
     DeleteClient event,
-    Emitter<ClientState> emit,
+    Emitter<HomeState> emit,
   ) async {
     emit(
       state.copyWith(

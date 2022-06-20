@@ -19,8 +19,8 @@ enum ClientCudStatus {
   failure,
 }
 
-class ClientState extends Equatable {
-  const ClientState({
+class HomeState extends Equatable {
+  const HomeState({
     this.error,
     this.status = ClientStateStatus.initial,
     this.clients = const [],
@@ -35,7 +35,7 @@ class ClientState extends Equatable {
   final int pageIndex;
   final ClientCudStatus cudStatus;
 
-  ClientState copyWith({
+  HomeState copyWith({
     Exception? error,
     ClientStateStatus? status,
     List<Client>? clients,
@@ -43,7 +43,7 @@ class ClientState extends Equatable {
     int? pageIndex,
     ClientCudStatus? cudStatus,
   }) {
-    return ClientState(
+    return HomeState(
       error: error ?? this.error,
       status: status ?? this.status,
       clients: clients ?? this.clients,

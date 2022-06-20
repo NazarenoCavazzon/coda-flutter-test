@@ -4,10 +4,10 @@ import 'package:dotted_decoration/dotted_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:test_coda/client/models/client.dart';
 import 'package:test_coda/common/app_size.dart';
 import 'package:test_coda/common/validators.dart';
 import 'package:test_coda/common/widgets/coda_button.dart';
+import 'package:test_coda/home/models/client.dart';
 import 'package:test_coda/l10n/l10n.dart';
 import 'package:test_coda/login/widgets/coda_text_form_field.dart';
 
@@ -133,9 +133,10 @@ class _ClientModalState extends State<ClientModal> {
                                       return SizedBox(
                                         width: AppSize(context).pixels(120),
                                         height: AppSize(context).pixels(120),
-                                        child: CircleAvatar(
-                                          backgroundImage: AssetImage(
-                                            image!.path,
+                                        child: ClipOval(
+                                          child: Image.file(
+                                            File(image!.path),
+                                            fit: BoxFit.cover,
                                           ),
                                         ),
                                       );

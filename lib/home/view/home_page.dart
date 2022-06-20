@@ -2,38 +2,38 @@ import 'package:blur/blur.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:test_coda/client/bloc/client_bloc.dart';
-import 'package:test_coda/client/models/client.dart';
-import 'package:test_coda/client/widgets/client_modal.dart';
-import 'package:test_coda/client/widgets/client_tile.dart';
 import 'package:test_coda/common/app_size.dart';
 import 'package:test_coda/common/box_keys.dart';
 import 'package:test_coda/common/widgets/background_paint.dart';
 import 'package:test_coda/common/widgets/coda_button.dart';
 import 'package:test_coda/common/widgets/coda_snackbar.dart';
+import 'package:test_coda/home/bloc/client_bloc.dart';
+import 'package:test_coda/home/models/client.dart';
+import 'package:test_coda/home/widgets/client_modal.dart';
+import 'package:test_coda/home/widgets/client_tile.dart';
 import 'package:test_coda/l10n/l10n.dart';
 import 'package:test_coda/login/view/login_page.dart';
 
-class PageClient extends StatelessWidget {
-  const PageClient({super.key});
+class PageHome extends StatelessWidget {
+  const PageHome({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ClientBloc(),
-      child: const ViewClient(),
+      create: (_) => HomeBloc(),
+      child: const ViewHome(),
     );
   }
 }
 
-class ViewClient extends StatefulWidget {
-  const ViewClient({super.key});
+class ViewHome extends StatefulWidget {
+  const ViewHome({super.key});
 
   @override
-  State<ViewClient> createState() => _ViewClientState();
+  State<ViewHome> createState() => _ViewHomeState();
 }
 
-class _ViewClientState extends State<ViewClient> {
+class _ViewHomeState extends State<ViewHome> {
   int clientsShowed = 5;
   bool noMoreClients = false;
   List<Client> clients = [];
@@ -42,7 +42,7 @@ class _ViewClientState extends State<ViewClient> {
   @override
   void initState() {
     super.initState();
-    context.read<ClientBloc>().loadClients();
+    context.read<HomeBloc>().loadClients();
   }
 
   @override
@@ -78,7 +78,7 @@ class _ViewClientState extends State<ViewClient> {
                 ],
               ),
             ),
-            BlocConsumer<ClientBloc, ClientState>(
+            BlocConsumer<HomeBloc, HomeState>(
               listener: (context, state) {
                 if (state.isSuccesful) {
                   setState(() {
@@ -86,14 +86,14 @@ class _ViewClientState extends State<ViewClient> {
                   });
                 }
                 if (state.cudStatus == ClientCudStatus.createdSuccessfully) {
-                  context.read<ClientBloc>().initialClient();
+                  context.read<HomeBloc>().initialClient();
                   const CodaSnackbar.success(message: 'Success').show(context);
                 } else if (state.cudStatus ==
                     ClientCudStatus.updatedSuccessfully) {
-                  context.read<ClientBloc>().initialClient();
+                  context.read<HomeBloc>().initialClient();
                   const CodaSnackbar.success(message: 'Updated').show(context);
                 } else if (state.cudStatus == ClientCudStatus.failure) {
-                  context.read<ClientBloc>().initialClient();
+                  context.read<HomeBloc>().initialClient();
                   const CodaSnackbar.error(message: 'Error').show(context);
                 }
               },
@@ -236,7 +236,7 @@ class _ViewClientState extends State<ViewClient> {
                                 ).then((client) {
                                   if (client != null) {
                                     context
-                                        .read<ClientBloc>()
+                                        .read<HomeBloc>()
                                         .createClient(client);
                                   }
                                 });
@@ -244,14 +244,14 @@ class _ViewClientState extends State<ViewClient> {
                             ),
                           ],
                         ),
-                        BlocConsumer<ClientBloc, ClientState>(
+                        BlocConsumer<HomeBloc, HomeState>(
                           listener: (context, state) {},
                           builder: (context, state) {
                             if (state.isSuccesful ||
                                 state.isLoadingMoreClients) {
                               return ClientListWidget(
                                 onRefresh: () async {
-                                  context.read<ClientBloc>().loadClients();
+                                  context.read<HomeBloc>().loadClients();
                                   setState(() {
                                     clientsShowed = 5;
                                     noMoreClients = false;
@@ -270,7 +270,7 @@ class _ViewClientState extends State<ViewClient> {
                                       });
                                     } else {
                                       context
-                                          .read<ClientBloc>()
+                                          .read<HomeBloc>()
                                           .loadMoreClients();
                                       setState(() {
                                         clientsShowed += 5;
@@ -300,7 +300,7 @@ class _ViewClientState extends State<ViewClient> {
                                       TextButton(
                                         onPressed: () {
                                           context
-                                              .read<ClientBloc>()
+                                              .read<HomeBloc>()
                                               .loadClients();
                                         },
                                         child: Text(context.l10n.retry),
@@ -341,7 +341,7 @@ class ClientListWidget extends StatelessWidget {
     required this.onRefresh,
   });
   final int clientsShowed;
-  final ClientState state;
+  final HomeState state;
   final List<Client> clients;
   final bool noMoreClients;
   final void Function()? onPressed;

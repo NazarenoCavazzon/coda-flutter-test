@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_coda/client/bloc/client_bloc.dart';
-import 'package:test_coda/client/models/client.dart';
-import 'package:test_coda/client/widgets/client_modal.dart';
 import 'package:test_coda/common/app_size.dart';
+import 'package:test_coda/home/bloc/client_bloc.dart';
+import 'package:test_coda/home/models/client.dart';
+import 'package:test_coda/home/widgets/client_modal.dart';
 import 'package:test_coda/l10n/l10n.dart';
 import 'package:text_scroll/text_scroll.dart';
 
@@ -99,11 +99,11 @@ class ClientTile extends StatelessWidget {
                   },
                 ).then((client) {
                   if (client != null) {
-                    context.read<ClientBloc>().editClient(client);
+                    context.read<HomeBloc>().editClient(client);
                   }
                 });
               } else {
-                context.read<ClientBloc>().deleteClient(client);
+                context.read<HomeBloc>().deleteClient(client);
               }
             },
             itemBuilder: (context) => [

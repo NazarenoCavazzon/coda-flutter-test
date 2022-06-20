@@ -1,12 +1,12 @@
 import 'package:blur/blur.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_coda/client/view/client_page.dart';
 import 'package:test_coda/common/app_size.dart';
 import 'package:test_coda/common/validators.dart';
 import 'package:test_coda/common/widgets/background_paint.dart';
 import 'package:test_coda/common/widgets/coda_button.dart';
 import 'package:test_coda/common/widgets/coda_snackbar.dart';
+import 'package:test_coda/home/view/home_page.dart';
 import 'package:test_coda/l10n/l10n.dart';
 import 'package:test_coda/login/bloc/login_bloc.dart';
 import 'package:test_coda/login/widgets/coda_text_form_field.dart';
@@ -56,7 +56,7 @@ class _ViewLoginState extends State<ViewLogin> {
                       .show(context);
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute<void>(
-                      builder: (context) => const PageClient(),
+                      builder: (context) => const PageHome(),
                     ),
                   );
                 } else if (state.isBadCredentials) {

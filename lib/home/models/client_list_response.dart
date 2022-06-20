@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
-
-import 'package:test_coda/client/models/client.dart';
-import 'package:test_coda/client/models/links.dart';
+import 'package:test_coda/home/models/client.dart';
+import 'package:test_coda/home/models/links.dart';
 
 @immutable
 class ClientListResponse {

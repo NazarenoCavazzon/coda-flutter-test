@@ -1,17 +1,17 @@
 part of 'client_bloc.dart';
 
-abstract class ClientEvent extends Equatable {
-  const ClientEvent();
+abstract class HomeEvent extends Equatable {
+  const HomeEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class LoadClients extends ClientEvent {}
+class LoadClients extends HomeEvent {}
 
-class LoadMoreClients extends ClientEvent {}
+class LoadMoreClients extends HomeEvent {}
 
-class EditClient extends ClientEvent {
+class EditClient extends HomeEvent {
   const EditClient({
     required this.client,
   });
@@ -21,7 +21,7 @@ class EditClient extends ClientEvent {
   List<Object> get props => [client];
 }
 
-class CreateClient extends ClientEvent {
+class CreateClient extends HomeEvent {
   const CreateClient({
     required this.client,
   });
@@ -31,9 +31,9 @@ class CreateClient extends ClientEvent {
   List<Object> get props => [client];
 }
 
-class InitialClient extends ClientEvent {}
+class InitialClient extends HomeEvent {}
 
-class DeleteClient extends ClientEvent {
+class DeleteClient extends HomeEvent {
   const DeleteClient({
     required this.client,
   });

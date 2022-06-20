@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:test_coda/client/view/client_page.dart';
 import 'package:test_coda/common/box_keys.dart';
+import 'package:test_coda/home/view/home_page.dart';
 import 'package:test_coda/l10n/l10n.dart';
 import 'package:test_coda/login/view/login_page.dart';
 
@@ -51,7 +51,7 @@ class _AppState extends State<App> {
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       home: token != null || (token?.isNotEmpty ?? false)
-          ? const PageClient()
+          ? const PageHome()
           : const PageLogin(),
     );
   }
